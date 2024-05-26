@@ -15,7 +15,7 @@ def generate_secret_key():
 SECRET_KEY = config('SECRET_KEY', default=generate_secret_key())
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='')
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
