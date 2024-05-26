@@ -1,0 +1,11 @@
+<div class="bg-white shadow-md rounded-lg p-4 mb-6">
+    <h2 class="text-xl font-semibold mb-2">{{ topic.title }}</h2>
+    <p class="text-gray-600 mb-4">Oluşturulma: {{ topic.created_at }} - Güncellenme: {{ topic.updated_at }}</p>
+    <div class="space-y-4">
+        {% for explanation in topic.explanations.all %}
+            <div data-id="{{ explanation.id }}">
+                {% include 'explanation_card.html' with explanation=explanation user_votes=user_votes user_favorites=user_favorites %}
+            </div>
+        {% endfor %}
+    </div>
+</div>

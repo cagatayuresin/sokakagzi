@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ topic.title }}</h2>
+<div>
+    {% for explanation in page_obj %}
+        {% include 'explanation_card.html' %}
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; ilk</a>
+            <a href="?page={{ page_obj.previous_page_number }}">önceki</a>
+        {% endif %}
+
+        <span class="current">
+            Sayfa {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">sonraki</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">son &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

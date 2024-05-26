@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Arama Sonuçları{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <h2 class="text-2xl font-semibold mb-4">Arama Sonuçları</h2>
+    {% if results %}
+        <ul>
+            {% for topic in results %}
+                <li class="mb-2">
+                    <a href="{% url 'topic_detail' topic.id %}" class="text-blue-600 hover:text-blue-800">{{ topic.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-gray-600">Aradığınız kelimeye uygun bir başlık bulunamadı.</p>
+    {% endif %}
+</div>
+{% endblock %}

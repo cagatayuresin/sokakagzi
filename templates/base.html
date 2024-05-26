@@ -1,0 +1,32 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/4ed1a77e89.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}"/>
+    <title>sokakagzi {% block title %}{% endblock title %}</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap");
+
+        * {
+            font-family: "Titillium Web", sans-serif;
+        }
+    </style>
+    {% block scripts %} {% endblock %}
+</head>
+<body>
+{% include 'navbar.html' %}
+
+<div class="container mx-auto">
+    {% block content %} {% endblock content %}
+</div>
+{% include 'footer.html' %}
+
+<script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>

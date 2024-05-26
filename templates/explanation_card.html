@@ -1,0 +1,44 @@
+{% load custom_tags %}
+
+<div class="bg-gray-100 shadow-md rounded-lg p-4 flex" data-id="{{ explanation.id }}">
+    <div class="w-12 h-12 mr-4">
+        <img class="rounded-full" src="{{ explanation.user.profile.avatar_url }}" alt="{{ explanation.user.username }}">
+    </div>
+    <div class="flex-grow">
+        <div class="flex justify-between items-center mb-2">
+            <div>
+                <h4 class="text-lg font-semibold">{{ explanation.user.username }}</h4>
+                <p class="text-gray-600 text-sm">{{ explanation.created_at }} - {{ explanation.updated_at }}</p>
+            </div>
+        {% if explanation.user != request.user %}
+            <div>
+                <button class="text-gray-500 hover:text-gray-700 mr-2 upvote-btn" data-id="{{ explanation.id }}">
+                    <i class="fas fa-thumbs-up {% if user_votes|get_item:explanation.id == 'up' %}text-blue-500{% endif %}"></i>
+                    <span class="upvote-count">{{ explanation.total_up_votes }}</span>
+                </button>
+                <button class="text-gray-500 hover:text-gray-700 mr-2 downvote-btn" data-id="{{ explanation.id }}">
+                    <i class="fas fa-thumbs-down {% if user_votes|get_item:explanation.id == 'down' %}text-red-500{% endif %}"></i>
+                    <span class="downvote-count">{{ explanation.total_down_votes }}</span>
+                </button>
+                <button class="text-gray-500 hover:text-gray-700 favorite-btn" data-id="{{ explanation.id }}">
+                    <i class="fas fa-heart {% if explanation.id in user_favorites %}text-red-500{% endif %}"></i>
+                    <span class="favorite-count">{{ explanation.total_favorites }}</span>
+                </button>
+            </div>
+        {% endif %}
+        </div>
+        <p class="text-gray-800">{{ explanation.content }}</p>
+        <div class="text-right text-sm text-gray-600">
+            Toplam Oy: <span class="total-votes">{{ explanation|total_votes }}</span>
+        </div>
+        {% if explanation.user == request.user %}
+        <div class="flex justify-end mt-2">
+            <a href="{% url 'edit_explanation' explanation.id %}" class="text-blue-600 hover:text-blue-800 mr-2">Düzenle</a>
+            <form method="post" action="{% url 'delete_explanation' explanation.id %}" onsubmit="return confirm('Bu girdiyi silmek istediğinize emin misiniz?');">
+                {% csrf_token %}
+                <button type="submit" class="text-red-600 hover:text-red-800">Sil</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
