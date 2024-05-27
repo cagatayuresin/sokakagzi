@@ -7,6 +7,7 @@ import string
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+# Rastgele bir Django secret key oluşturur
 def generate_secret_key():
     chars = string.ascii_letters + string.digits + string.punctuation
     return ''.join(random.choice(chars) for _ in range(50))
@@ -15,7 +16,8 @@ def generate_secret_key():
 SECRET_KEY = config('SECRET_KEY', default=generate_secret_key())
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = config('SITE_DOMAIN', cast=Csv()) + ['localhost']
+CSRF_TRUSTED_ORIGINS = ['http://localhost', 'https://' + config('SITE_DOMAIN')]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -38,6 +40,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 ROOT_URLCONF = 'sokakagzi.urls'
 
@@ -60,23 +65,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sokakagzi.asgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT', default='5432'),
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config('DB_NAME'),
+#         'USER': config('DB_USER'),
+#         'PASSWORD': config('DB_PASSWORD'),
+#         'HOST': config('DB_HOST'),
+#         'PORT': config('DB_PORT', default='5432'),
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -117,7 +122,6 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
-
 
 SITE_ID = 1
 

@@ -33,10 +33,10 @@
         </div>
         {% if explanation.user == request.user %}
         <div class="flex justify-end mt-2">
-            <a href="{% url 'edit_explanation' explanation.id %}" class="text-blue-600 hover:text-blue-800 mr-2">Düzenle</a>
+            <a href="{% url 'edit_explanation' explanation.id %}" class="text-blue-600 hover:text-blue-800 mr-2"><i class="fa-solid fa-pen-to-square"></i> Düzenle</a>
             <form method="post" action="{% url 'delete_explanation' explanation.id %}" onsubmit="return confirm('Bu girdiyi silmek istediğinize emin misiniz?');">
                 {% csrf_token %}
-                <button type="submit" class="text-red-600 hover:text-red-800">Sil</button>
+                <button type="submit" class="text-red-600 hover:text-red-800"><i class="fa-solid fa-trash-can"></i> Sil</button>
             </form>
         </div>
         {% endif %}

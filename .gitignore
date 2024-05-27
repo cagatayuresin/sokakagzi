@@ -1,6 +1,7 @@
 /.env
 /docker-compose.yml
 /.venv/
+/.idea/
 
 # Ultimate Python Related Projects' gitignore File
 __pycache__/

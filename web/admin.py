@@ -8,8 +8,6 @@ from django.contrib.auth.models import User
 admin.site.register(UserProfile)
 admin.site.register(Topic)
 admin.site.register(Explanation)
-admin.site.register(UserVote)
-admin.site.register(UserFavorite)
 
 
 class UserProfileInline(admin.StackedInline):
