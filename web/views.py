@@ -5,23 +5,35 @@ from .forms import LoginForm, ExplanationForm, RegisterForm, UserProfileForm, Us
 from django.contrib.auth import authenticate, login, logout
 from django.views import generic
 from django.urls import reverse_lazy
-from django.db.models import Q
+from django.db.models import Q, Count, F, IntegerField, ExpressionWrapper
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
 
-
-@login_required
 def topic_detail(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
-    explanations = Explanation.objects.filter(topic=topic).order_by('-created_at')
+
+    # Explanationsları çek
+    explanations = list(Explanation.objects.filter(topic=topic))
+
+    # Python'da sıralama: en yüksek oy alandan en düşük oya
+    explanations.sort(key=lambda x: x.total_votes, reverse=True)
+
     paginator = Paginator(explanations, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    user_votes = UserVote.objects.filter(user=request.user, explanation__topic=topic).values_list('explanation_id', 'vote_type')
-    user_favorites = UserFavorite.objects.filter(user=request.user, explanation__topic=topic).values_list('explanation_id', flat=True)
-    user_votes = dict(user_votes)  # Dictionary format for easier lookup in template
+
+    if request.user.is_authenticated:
+        user_votes = UserVote.objects.filter(user=request.user, explanation__topic=topic).values_list('explanation_id',
+                                                                                                      'vote_type')
+        user_favorites = UserFavorite.objects.filter(user=request.user, explanation__topic=topic).values_list(
+            'explanation_id', flat=True)
+        user_votes = dict(user_votes)  # Dictionary format for easier lookup in template
+    else:
+        user_votes = {}
+        user_favorites = []
+
     return render(request, 'topic_detail.html', {
         'topic': topic,
         'page_obj': page_obj,
@@ -62,6 +74,7 @@ def user_explanations(request):
         'user_votes': user_votes,
         'user_favorites': user_favorites,
     })
+
 
 @login_required
 def edit_explanation(request, explanation_id):
@@ -148,7 +161,15 @@ def favorite_explanation(request, explanation_id):
 
 def home(request):
     topics = list(Topic.objects.all())
-    random_topics = random.sample(topics, min(len(topics), 5))
+    random_topics = random.sample(topics, min(len(topics), 10))
+
+    # En yüksek oylu açıklamayı Python ile belirlemek
+    topics_with_best_explanation = []
+    for topic in random_topics:
+        explanations = list(topic.explanations.all())
+        explanations.sort(key=lambda x: x.total_votes, reverse=True)
+        best_explanation = explanations[0] if explanations else None
+        topics_with_best_explanation.append((topic, best_explanation))
 
     if request.user.is_authenticated:
         user_votes = UserVote.objects.filter(user=request.user).values_list('explanation_id', 'vote_type')
@@ -159,7 +180,7 @@ def home(request):
         user_favorites = []
 
     return render(request, 'home.html', {
-        'random_topics': random_topics,
+        'topics_with_best_explanation': topics_with_best_explanation,
         'user_votes': user_votes,
         'user_favorites': user_favorites,
     })

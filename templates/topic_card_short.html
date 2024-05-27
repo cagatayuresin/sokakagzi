@@ -4,12 +4,10 @@
     </h2>
     <p class="text-gray-600 mb-4">Oluşturulma: {{ topic.created_at }} - Güncellenme: {{ topic.updated_at }}</p>
     <div>
-        {% if topic.explanations.all %}
-            {% with best_explanation=topic.explanations.all|first %}
-                <div data-id="{{ best_explanation.id }}">
-                    {% include 'explanation_card.html' with explanation=best_explanation user_votes=user_votes user_favorites=user_favorites %}
-                </div>
-            {% endwith %}
+        {% if best_explanation %}
+            <div data-id="{{ best_explanation.id }}">
+                {% include 'explanation_card.html' with explanation=best_explanation user_votes=user_votes user_favorites=user_favorites %}
+            </div>
         {% else %}
             <p class="text-gray-600">Henüz açıklama yok.</p>
         {% endif %}

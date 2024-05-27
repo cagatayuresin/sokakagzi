@@ -1,13 +1,13 @@
 <div class="bg-white shadow-md rounded-lg p-4">
-    <h3 class="text-lg font-semibold mb-4">Add a New Explanation</h3>
+    <h3 class="text-lg font-semibold mb-4">Yeni Açıklama Ekle</h3>
     <form method="post" action="{% url 'add_explanation' topic.id %}">
         {% csrf_token %}
         <div class="mb-4">
-            <label for="content" class="block text-gray-700 text-sm font-bold mb-2">Explanation</label>
+            <label for="content" class="block text-gray-700 text-sm font-bold mb-2">Açıklama</label>
             <textarea id="content" name="content" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
         </div>
         <div class="flex items-center justify-between">
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Ekle</button>
         </div>
     </form>
 </div>

@@ -3,8 +3,8 @@
 {% block content %}
 <div class="container mx-auto p-4">
     <div class="grid grid-cols-1 gap-6">
-        {% for topic in random_topics %}
-            {% include 'topic_card_short.html' with topic=topic user_votes=user_votes user_favorites=user_favorites %}
+        {% for topic, best_explanation in topics_with_best_explanation %}
+            {% include 'topic_card_short.html' with topic=topic best_explanation=best_explanation user_votes=user_votes user_favorites=user_favorites %}
         {% endfor %}
     </div>
 </div>
